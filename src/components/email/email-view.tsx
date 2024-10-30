@@ -1,0 +1,3 @@
+/**
+ * email detail view
+ */
