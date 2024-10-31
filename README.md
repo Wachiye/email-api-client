@@ -24,14 +24,14 @@ This is a simple email client that allows users to send, receive, and view email
 - **Deployment**: Vercel (back-end & front-end)
 
 ## Installation (CLIENT)
-1. Clone the `CLIENT` repo
+1. Clone the `CLIENT` branch
 2. ADD `VITE_API_BASE_URL` TO `.env` file with URL of API
 3. RUN `npm install` in client dir
 4. RUN `npm run dev` fro dev or RUN `npm run build` then `npm start` from prod
 
 
 ## Installation (API)
-1. Clone the `api` repo
+1. Clone the `api` branch
 2. Create and update the api .env file based on the api `.env-example`
 3. RUN `npm install` in client dir
 4. RUN `npm run dev` fro dev or RUN `npm run build` then `npm start` from prod
