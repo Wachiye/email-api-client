@@ -4,9 +4,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import './index.css'
 import "./App.css";
 import App from './App.tsx'
+import { EmailProvider } from './context/email-context.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <EmailProvider>
+       <App />
+    </EmailProvider>
+   
   </StrictMode>,
 )

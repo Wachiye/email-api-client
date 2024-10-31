@@ -2,36 +2,57 @@
  * email inbox page
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmailList from "../components/email/email-list";
 import EmailPagination from "../components/shared/email-pagination";
 import PageHeader from "../components/shared/page-header";
+import { fetchEmails } from "../services/email-service";
+import { useEmail } from "../components/hooks/use-email";
 
 function EmailInboxPage() {
-  const [pagination, setPagination] = useState<{ limit: number; page: number }>(
+  const [filter, setFilter] = useState<{ limit: number; page: number, search?:string }>(
     { limit: 10, page: 1 }
   );
 
+  const { emails, setEmails, senderEmail } = useEmail();
+
+  useEffect(() => {
+    const loadEmails = async () => {
+      try {
+        const res = await fetchEmails(filter);
+        setEmails(res.data);
+      } catch (err) {
+        console.log("Failed to fetch emails.", err);
+      } 
+    };
+
+    loadEmails();
+  }, [filter, setEmails]);
+
   const onPrev = () => {
-    setPagination((curr) => ({
+    setFilter((curr) => ({
       ...curr,
       page: curr.page > 1 ? curr.page - 1 : curr.page,
     }));
   };
 
   const onNext = () => {
-    setPagination((curr) => ({ ...curr, page: curr.page + 1 }));
+    setFilter((curr) => ({ ...curr, page: curr.page + 1 }));
   };
 
   return (
     <>
       <PageHeader title="Inbox">
         <div className="d-flex justify-content-between align-items-center gap-2">
-          <input className="form-control form-control-sm flex-fill"  placeholder={"Search email/subject"}/>
+          <input
+            className="form-control form-control-sm flex-fill"
+            placeholder={"Search email/subject"}
+            onChange={(e)=>setFilter((curr) => ({ ...curr, search: e.target.value }))}
+          />
           <EmailPagination
-            size={pagination.limit}
+            size={filter.limit}
             onSizeChange={(size) =>
-              setPagination((curr) => ({ ...curr, limit: size }))
+              setFilter((curr) => ({ ...curr, limit: size }))
             }
             onPrev={onPrev}
             onNext={onNext}
@@ -39,7 +60,7 @@ function EmailInboxPage() {
         </div>
       </PageHeader>
       <div className="px-2">
-        <EmailList />
+        <EmailList emails={emails.filter((x) => x.recipient === senderEmail)} />
       </div>
     </>
   );
